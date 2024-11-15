@@ -1,0 +1,22 @@
+name: ci/cd pipeline
+
+on: 
+  push:
+    branches:
+      - main
+      - workbranch # Menjalankan pipeline di branch "workbranch" juga
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Menggunakan versi terbaru checkout
+        
+      - name: Setup Go environment
+        uses: actions/setup-go@v4  # Menggunakan versi terbaru setup-go
+        with:
+          go-version: '1.21'  # Menggunakan versi Go yang diinginkan
+        
+      - name: Run tests with coverage
+        run: go test -v -cover ./...  # Menambahkan flag -cover untuk cakupan

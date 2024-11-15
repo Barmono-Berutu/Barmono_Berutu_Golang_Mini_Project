@@ -2,8 +2,10 @@ package helper
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
 
 	"github.com/google/generative-ai-go/genai"
@@ -11,7 +13,14 @@ import (
 )
 
 func ResponseAI(ctx context.Context, question string) (string, error) {
-	client, err := genai.NewClient(ctx, option.WithAPIKey("AIzaSyD3z_9LRn3x2J0VTW176jLDE0ilmf_wCMQ"))
+	// Create a custom HTTP client with insecure transport
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	client, err := genai.NewClient(ctx, option.WithAPIKey("AIzaSyDAsFVvWobfb1sWT-fZE1FJVyLyq-9kh0k"), option.WithHTTPClient(httpClient))
 	if err != nil {
 		log.Fatal(err)
 	}

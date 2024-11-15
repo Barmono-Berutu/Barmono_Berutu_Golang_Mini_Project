@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/google/generative-ai-go/genai"
@@ -12,7 +11,7 @@ import (
 )
 
 func ResponseAI(ctx context.Context, question string) (string, error) {
-	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("AI_API_KEY")))
+	client, err := genai.NewClient(ctx, option.WithAPIKey("AIzaSyDH_LO9LZulVt6yxB7j0pNel8N5U8Adp7o"))
 	if err != nil {
 		log.Fatal(err)
 		return "", err

@@ -9,4 +9,5 @@ import (
 func AuthRoutes(e *echo.Group, authController *controllers.AuthController) {
 	e.POST("/register", authController.Register)
 	e.POST("/login", authController.Login)
+	e.GET("/logout", authController.Logout)
 }

@@ -44,7 +44,33 @@ func (c *AuthController) Login(ctx echo.Context) error {
 		return helper.JSONErrorResponse(ctx, http.StatusUnauthorized, "Login gagal: "+err.Error())
 	}
 
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    token,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false,
+		MaxAge:   72 * 60 * 60,
+	}
+
+	ctx.SetCookie(cookie)
+
 	return helper.JSONSuccessResponse(ctx, map[string]string{
-		"token": token,
+		"Token": token,
 	})
+}
+
+func (c *AuthController) Logout(ctx echo.Context) error {
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false,
+		MaxAge:   -1,
+	}
+
+	ctx.SetCookie(cookie)
+
+	return helper.JSONSuccessResponse(ctx, "Berhasil Logout")
 }

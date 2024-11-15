@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"project_mini_golang/config"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type JwtCustomClaims struct {
-	UserID int    `json:"user_id"` // Perbaikan tag JSON
+	UserID int    `json:"user_id"`
 	Email  string `json:"email"`
 	jwt.RegisteredClaims
 }
@@ -24,8 +25,12 @@ type jwtService struct {
 func NewJWTService(cfg *config.JWTConfig) JWTService {
 	return &jwtService{config: cfg}
 }
-
 func (s *jwtService) GenerateJWT(email string, id int) (string, error) {
+	// Periksa apakah SecretKey kosong
+	if s.config.SecretKey == "" {
+		return "", errors.New("secret key is required")
+	}
+
 	claims := &JwtCustomClaims{
 		UserID: id,
 		Email:  email,

@@ -18,7 +18,7 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 		return "", err
 	}
 
-	modelAI := client.GenerativeModel("gemini-pro")
+	modelAI := client.GenerativeModel("gemini-1.5-flash")
 	modelAI.SetTemperature(0)
 
 	resp, err := modelAI.GenerateContent(ctx, genai.Text(question))

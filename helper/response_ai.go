@@ -18,7 +18,7 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 	defer client.Close()
 
 	model := client.GenerativeModel("gemini-1.5-flash")
-	resp, err := model.GenerateContent(ctx, genai.Text("Write a story about a magic backpack."))
+	resp, err := model.GenerateContent(ctx, genai.Text(question))
 	if err != nil {
 		log.Fatal(err)
 	}

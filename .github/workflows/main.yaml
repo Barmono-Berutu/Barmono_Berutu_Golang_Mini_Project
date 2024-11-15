@@ -19,4 +19,4 @@ jobs:
           go-version: '1.21'  # Menggunakan versi Go yang diinginkan
         
       - name: Run tests with coverage
-        run: go test -v -cover ./...  # Menambahkan flag -cover untuk cakupan
+        run: go test -cover ./...  # Menambahkan flag -cover untuk cakupan

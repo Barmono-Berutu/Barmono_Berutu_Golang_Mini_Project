@@ -95,3 +95,9 @@ Ikuti langkah-langkah berikut untuk menginstal dan menjalankan API ini di mesin 
 3. **Setelah mengubah semua data yang ada di .env, silakan jalankan kode:**
    ```bash
    go run main.go
+
+## Cara Penggunaan
+
+1. **Buka file:**
+   ```bash
+   buka file AIR_Quality_API.postman_collection.json dan import di postman

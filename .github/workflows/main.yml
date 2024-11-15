@@ -31,7 +31,7 @@ jobs:
         run: echo "${{ secrets.ENV }}" >> .env
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USER }}/clean_architectur_test:terbaru .
+        run: docker build -t ${{ secrets.DOCKER_USER }}/project_mini:terbaru .
 
       - name: Docker Hub login
         uses: docker/login-action@v2
@@ -40,4 +40,4 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USER }}/clean_architectur_test:terbaru
+        run: docker push ${{ secrets.DOCKER_USER }}/project_mini:terbaru

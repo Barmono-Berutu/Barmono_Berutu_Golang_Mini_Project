@@ -20,10 +20,8 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 		return "", fmt.Errorf("API Key is missing")
 	}
 
-	// Create default HTTP client
 	httpClient := &http.Client{}
 
-	// Create a new GenAI client
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey), option.WithHTTPClient(httpClient))
 	if err != nil {
 		log.Printf("Error creating client: %v", err)

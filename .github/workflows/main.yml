@@ -29,9 +29,15 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "Creating .env file with API Key..."
+          echo "Creating .env file from GitHub Secrets..."
           echo "AI_API_KEY=${{ secrets.AI_API_KEY }}" > .env
           echo "Created .env file:"
+          cat .env
+
+      - name: Debug .env file
+        run: |
+          echo "Checking if .env exists..."
+          ls -la
           cat .env
 
       - name: Build Docker image
@@ -64,6 +70,8 @@ jobs:
 
     - name: Copy .env to EC2
       run: |
+        echo "Checking if .env exists before copying to EC2..."
+        ls -la .env
         scp -i ec2-key.pem -o StrictHostKeyChecking=no .env $EC2_USER@$EC2_HOST:/home/$EC2_USER/.env
 
     - name: Deploy to EC2

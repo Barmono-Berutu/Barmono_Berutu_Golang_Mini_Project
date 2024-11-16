@@ -2,6 +2,7 @@ package helper
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,8 +21,11 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 		return "", fmt.Errorf("API Key is missing")
 	}
 
-	// Create default HTTP client
-	httpClient := &http.Client{}
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // Note: Not recommended for production
+		},
+	}
 
 	// Create a new GenAI client
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey), option.WithHTTPClient(httpClient))

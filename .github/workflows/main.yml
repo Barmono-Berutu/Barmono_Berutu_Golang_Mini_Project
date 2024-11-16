@@ -28,7 +28,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Create .env file
-        run: echo "${{ secrets.ENV }}" >> .env
+        run: |
+          echo "Creating .env file with API Key..."
+          echo "AI_API_KEY=${{ secrets.AI_API_KEY }}" > .env
+          echo "Created .env file:"
+          cat .env
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USER }}/project_mini_golang:terbaru .
@@ -58,30 +62,30 @@ jobs:
         echo "${{ secrets.EC2_PEM }}" > ec2-key.pem
         chmod 600 ec2-key.pem
 
+    - name: Copy .env to EC2
+      run: |
+        scp -i ec2-key.pem -o StrictHostKeyChecking=no .env $EC2_USER@$EC2_HOST:/home/$EC2_USER/.env
+
     - name: Deploy to EC2
       run: |
         ssh -i ec2-key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
 
           # Stop and remove old container
           if sudo docker ps -a --filter "name=my-project-mini-golang" | grep my-project-mini-golang; then
-            echo "Stopping and removing old container..."
             sudo docker stop my-project-mini-golang
             sudo docker rm my-project-mini-golang
           fi
 
           # Remove old image (optional)
           if sudo docker images | grep $IMAGE_URI; then
-            echo "Removing old image..."
             sudo docker rmi -f $IMAGE_URI
           fi
 
           # Pull the latest image
-          echo "Pulling latest Docker image..."
           sudo docker pull $IMAGE_URI
 
           # Run the new container
-          echo "Running new container..."
-          sudo docker run -d --name my-project-mini-golang -p 8000:8000 $IMAGE_URI
+          sudo docker run -d --name my-project-mini-golang --env-file /home/$EC2_USER/.env -p 8000:8000 $IMAGE_URI
         EOF
 
     - name: Clean up PEM file

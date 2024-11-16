@@ -29,8 +29,15 @@ jobs:
 
       - name: Create .env file
         run: |
+          echo "Creating .env file from GitHub Secrets..."
           echo "${{ secrets.ENV }}" > .env
           echo "Created .env file:"
+          cat .env
+
+      - name: Debug .env file
+        run: |
+          echo "Checking if .env file exists..."
+          ls -la
           cat .env
 
       - name: Build Docker image
@@ -63,8 +70,11 @@ jobs:
 
     - name: Copy .env to EC2
       run: |
+        echo "Checking if .env exists locally before copying to EC2..."
+        ls -la .env
         echo "Copying .env to EC2..."
         scp -i ec2-key.pem -o StrictHostKeyChecking=no .env $EC2_USER@$EC2_HOST:/home/$EC2_USER/.env
+        echo "Verifying .env on EC2..."
         ssh -i ec2-key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST "ls -la /home/$EC2_USER/.env && cat /home/$EC2_USER/.env"
 
     - name: Deploy to EC2

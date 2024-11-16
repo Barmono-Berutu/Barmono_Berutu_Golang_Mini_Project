@@ -34,11 +34,11 @@ jobs:
           echo "Created .env file:"
           cat .env
 
-      - name: Debug .env file
-        run: |
-          echo "Checking if .env exists..."
-          ls -la
-          cat .env
+      - name: Upload .env file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: env-file
+          path: .env
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USER }}/project_mini_golang:terbaru .
@@ -63,6 +63,17 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v2
 
+    - name: Download .env file artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: env-file
+
+    - name: Verify .env file
+      run: |
+        echo "Checking .env file..."
+        ls -la
+        cat .env
+
     - name: Create PEM file from secret
       run: |
         echo "${{ secrets.EC2_PEM }}" > ec2-key.pem
@@ -70,14 +81,12 @@ jobs:
 
     - name: Copy .env to EC2
       run: |
-        echo "Checking if .env exists before copying to EC2..."
-        ls -la .env
+        echo "Copying .env to EC2..."
         scp -i ec2-key.pem -o StrictHostKeyChecking=no .env $EC2_USER@$EC2_HOST:/home/$EC2_USER/.env
 
     - name: Deploy to EC2
       run: |
         ssh -i ec2-key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
-
           # Stop and remove old container
           if sudo docker ps -a --filter "name=my-project-mini-golang" | grep my-project-mini-golang; then
             sudo docker stop my-project-mini-golang

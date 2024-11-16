@@ -1,0 +1,1188 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>config: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">project_mini_golang/config/config.go (0.0%)</option>
+				
+				<option value="file1">project_mini_golang/config/jwtconfig.go (0.0%)</option>
+				
+				<option value="file2">project_mini_golang/controllers/air_quality_controller.go (0.0%)</option>
+				
+				<option value="file3">project_mini_golang/controllers/alert_controller.go (0.0%)</option>
+				
+				<option value="file4">project_mini_golang/controllers/auth_controller.go (0.0%)</option>
+				
+				<option value="file5">project_mini_golang/controllers/rekomendasi_controller.go (0.0%)</option>
+				
+				<option value="file6">project_mini_golang/domain/repository/air_quality_repository.go (0.0%)</option>
+				
+				<option value="file7">project_mini_golang/domain/repository/alert_repository.go (0.0%)</option>
+				
+				<option value="file8">project_mini_golang/domain/repository/rekomendasi_repository.go (0.0%)</option>
+				
+				<option value="file9">project_mini_golang/domain/repository/user_repository.go (0.0%)</option>
+				
+				<option value="file10">project_mini_golang/domain/usecase/air_quality_usecase.go (0.0%)</option>
+				
+				<option value="file11">project_mini_golang/domain/usecase/alert_usecase.go (0.0%)</option>
+				
+				<option value="file12">project_mini_golang/domain/usecase/rekomendasi_usecase.go (0.0%)</option>
+				
+				<option value="file13">project_mini_golang/domain/usecase/user_usecase.go (86.4%)</option>
+				
+				<option value="file14">project_mini_golang/helper/error.go (0.0%)</option>
+				
+				<option value="file15">project_mini_golang/helper/response.go (0.0%)</option>
+				
+				<option value="file16">project_mini_golang/helper/response_ai.go (0.0%)</option>
+				
+				<option value="file17">project_mini_golang/main.go (0.0%)</option>
+				
+				<option value="file18">project_mini_golang/middleware/jwt_middleware.go (0.0%)</option>
+				
+				<option value="file19">project_mini_golang/routes/routes_airquality.go (0.0%)</option>
+				
+				<option value="file20">project_mini_golang/routes/routes_alert.go (0.0%)</option>
+				
+				<option value="file21">project_mini_golang/routes/routes_auth.go (0.0%)</option>
+				
+				<option value="file22">project_mini_golang/routes/routes_rekomendasi.go (0.0%)</option>
+				
+				<option value="file23">project_mini_golang/service/jwt_service.go (88.9%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package config
+
+import (
+        "fmt"
+        "os"
+        "project_mini_golang/domain/model"
+
+        "gorm.io/driver/mysql"
+        "gorm.io/gorm"
+)
+
+type ConfigDB struct {
+        Host     string
+        User     string
+        Password string
+        Port     string
+        Name     string
+}
+
+func InitDB() (*gorm.DB, error) <span class="cov0" title="0">{
+        configDB := ConfigDB{
+                Host:     os.Getenv("DATABASE_HOST"),
+                User:     os.Getenv("DATABASE_USER"),
+                Password: os.Getenv("DATABASE_PASSWORD"),
+                Port:     os.Getenv("DATABASE_PORT"),
+                Name:     os.Getenv("DATABASE_NAME"),
+        }
+
+        dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&amp;parseTime=True&amp;loc=Local",
+                configDB.User,
+                configDB.Password,
+                configDB.Host,
+                configDB.Port,
+                configDB.Name)
+
+        db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config{})
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("gagal membuka koneksi ke database: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">err = db.AutoMigrate(&amp;model.User{}, &amp;model.AirQualityData{}, &amp;model.Alert{}, &amp;model.Rekomendasi{})
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("gagal melakukan migrasi: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return db, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package config
+
+import "os"
+
+type JWTConfig struct {
+        SecretKey string
+}
+
+func NewJWTConfig() *JWTConfig <span class="cov0" title="0">{
+        return &amp;JWTConfig{
+                SecretKey: os.Getenv("JWT_SECRET_KEY"), // Ganti dengan secret key yang aman
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package controllers
+
+import (
+        "net/http"
+        "project_mini_golang/domain/model"
+        "project_mini_golang/domain/usecase"
+        "project_mini_golang/helper"
+
+        "github.com/labstack/echo/v4"
+)
+
+type AirQualityController struct {
+        AirQualityUsecase  usecase.AirQualityUsecase
+        AlertUsecase       usecase.AlertUsecase
+        RekomendasiUsecase usecase.RekomendasiUsecase
+}
+
+func NewAirQualityController(air usecase.AirQualityUsecase, alertusecase usecase.AlertUsecase, rekomendasiusecase usecase.RekomendasiUsecase) *AirQualityController <span class="cov0" title="0">{
+        return &amp;AirQualityController{
+                AirQualityUsecase:  air,
+                AlertUsecase:       alertusecase,
+                RekomendasiUsecase: rekomendasiusecase,
+        }
+}</span>
+
+func (c *AirQualityController) GetData(ctx echo.Context) error <span class="cov0" title="0">{
+        data, err := c.AirQualityUsecase.GetData()
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal mengambil data kualitas udara: "+err.Error())
+        }</span>
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, data)</span>
+}
+
+func (c *AirQualityController) GetDataByID(ctx echo.Context) error <span class="cov0" title="0">{
+        id, err := helper.GetIDParam(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "Format ID tidak valid: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">data, err := c.AirQualityUsecase.GetDataID(id)
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal mengambil data kualitas udara: "+err.Error())
+        }</span>
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, data)</span>
+}
+
+func (c *AirQualityController) PostData(ctx echo.Context) error <span class="cov0" title="0">{
+        userID := ctx.Get("user_id").(int)
+        data := new(model.AirQualityData)
+        if err := ctx.Bind(data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "Gagal menginput data: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">data.UserID = userID
+
+        if err := c.AirQualityUsecase.PostData(data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal menyimpan data kualitas udara: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">if err := c.AlertUsecase.GenerateAlert(ctx.Request().Context(), data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal menghasilkan alert: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">if err := c.RekomendasiUsecase.GenerateRekomendasi(ctx.Request().Context(), data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal menghasilkan rekomendasi: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, "Data kualitas udara berhasil ditambahkan")</span>
+}
+
+func (c *AirQualityController) UpdateData(ctx echo.Context) error <span class="cov0" title="0">{
+        id, err := helper.GetIDParam(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "Format ID tidak valid: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">data := new(model.AirQualityData)
+        if err := ctx.Bind(data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "Gagal mengikat data: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">if err := c.AirQualityUsecase.PutData(id, data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal memperbarui data udara: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">if err := c.AlertUsecase.GenerateAlert(ctx.Request().Context(), data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal memperbarui alert: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">if err := c.RekomendasiUsecase.GenerateRekomendasi(ctx.Request().Context(), data); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal memperbarui rekomendasi: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, map[string]interface{}{
+                "message": "Data udara berhasil diperbarui dan respons AI telah diperbarui",
+                "data":    data,
+        })</span>
+
+}
+
+func (c *AirQualityController) DeleteData(ctx echo.Context) error <span class="cov0" title="0">{
+        id, err := helper.GetIDParam(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "Format ID tidak valid: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">if err := c.AirQualityUsecase.DeleteDatas(id); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal menghapus data udara: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, "Data udara berhasil dihapus")</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package controllers
+
+import (
+        "net/http"
+        "project_mini_golang/domain/usecase"
+        "project_mini_golang/helper"
+
+        "github.com/labstack/echo/v4"
+)
+
+type AlertController struct {
+        AlertUsecase usecase.AlertUsecase
+}
+
+func NewAlertController(alertUsecase usecase.AlertUsecase) *AlertController <span class="cov0" title="0">{
+        return &amp;AlertController{
+                AlertUsecase: alertUsecase,
+        }
+}</span>
+
+func (c *AlertController) GetAllDataAlerts(ctx echo.Context) error <span class="cov0" title="0">{
+        alerts, err := c.AlertUsecase.GetAllAlerts()
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal mengambil data alert: "+err.Error())
+        }</span>
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, alerts)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package controllers
+
+import (
+        "net/http"
+        "project_mini_golang/domain/model"
+        "project_mini_golang/domain/usecase"
+        "project_mini_golang/helper"
+
+        "github.com/labstack/echo/v4"
+)
+
+type AuthController struct {
+        AuthUsecase usecase.UserUsecase
+}
+
+func NewAuthController(authUsecase usecase.UserUsecase) *AuthController <span class="cov0" title="0">{
+        return &amp;AuthController{
+                AuthUsecase: authUsecase,
+        }
+}</span>
+
+func (c *AuthController) Register(ctx echo.Context) error <span class="cov0" title="0">{
+        var user model.User
+        if err := ctx.Bind(&amp;user); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "gagal mendapatkan data: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">err := c.AuthUsecase.Register(&amp;user)
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "gagal register user: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, "Berhasil Register User")</span>
+}
+
+func (c *AuthController) Login(ctx echo.Context) error <span class="cov0" title="0">{
+        var user model.User
+        if err := ctx.Bind(&amp;user); err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusBadRequest, "gagal mendapatkan data: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">token, err := c.AuthUsecase.Login(user.Email, user.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusUnauthorized, "Login gagal: "+err.Error())
+        }</span>
+
+        <span class="cov0" title="0">cookie := &amp;http.Cookie{
+                Name:     "token",
+                Value:    token,
+                Path:     "/",
+                HttpOnly: true,
+                Secure:   false,
+                MaxAge:   72 * 60 * 60,
+        }
+
+        ctx.SetCookie(cookie)
+
+        return helper.JSONSuccessResponse(ctx, map[string]string{
+                "Token": token,
+        })</span>
+}
+
+func (c *AuthController) Logout(ctx echo.Context) error <span class="cov0" title="0">{
+        cookie := &amp;http.Cookie{
+                Name:     "token",
+                Value:    "",
+                Path:     "/",
+                HttpOnly: true,
+                Secure:   false,
+                MaxAge:   -1,
+        }
+
+        ctx.SetCookie(cookie)
+
+        return helper.JSONSuccessResponse(ctx, "Berhasil Logout")
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package controllers
+
+import (
+        "net/http"
+        "project_mini_golang/domain/usecase"
+        "project_mini_golang/helper"
+
+        "github.com/labstack/echo/v4"
+)
+
+type RekomendasiController struct {
+        RekomendasiUsecase usecase.RekomendasiUsecase
+}
+
+func NewRekomendasiController(rekomendasiUsecase usecase.RekomendasiUsecase) *RekomendasiController <span class="cov0" title="0">{
+        return &amp;RekomendasiController{
+                RekomendasiUsecase: rekomendasiUsecase,
+        }
+}</span>
+
+func (c *RekomendasiController) GetAllDataAlerts(ctx echo.Context) error <span class="cov0" title="0">{
+        alerts, err := c.RekomendasiUsecase.GetAllRekomendasi()
+        if err != nil </span><span class="cov0" title="0">{
+                return helper.JSONErrorResponse(ctx, http.StatusInternalServerError, "Gagal mengambil data alert: "+err.Error())
+        }</span>
+        <span class="cov0" title="0">return helper.JSONSuccessResponse(ctx, alerts)</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package repository
+
+import (
+        "project_mini_golang/domain/model"
+
+        "gorm.io/gorm"
+)
+
+type AirQualityRepository interface {
+        GetAllData() ([]model.AirQualityData, error)
+        GetDataByID(id int) (model.AirQualityData, error)
+        CreateData(*model.AirQualityData) error
+        UpdateData(id int, data *model.AirQualityData) error
+        DeleteData(id int) error
+}
+
+type AirQualityRepositoryimpl struct {
+        DB *gorm.DB
+}
+
+func NewAirQualityRepository(DB *gorm.DB) AirQualityRepository <span class="cov0" title="0">{
+        return &amp;AirQualityRepositoryimpl{DB: DB}
+}</span>
+
+func (r *AirQualityRepositoryimpl) GetAllData() ([]model.AirQualityData, error) <span class="cov0" title="0">{
+        var data []model.AirQualityData
+        if err := r.DB.Preload("Alerts").Preload("Rekomendasi").Find(&amp;data).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return data, nil</span>
+}
+
+func (r *AirQualityRepositoryimpl) GetDataByID(id int) (model.AirQualityData, error) <span class="cov0" title="0">{
+        var data model.AirQualityData
+        if err := r.DB.Where("id =?", id).Preload("Alerts").Preload("Rekomendasi").First(&amp;data).Error; err != nil </span><span class="cov0" title="0">{
+                return data, err
+        }</span>
+        <span class="cov0" title="0">return data, nil</span>
+}
+
+func (r *AirQualityRepositoryimpl) CreateData(data *model.AirQualityData) error <span class="cov0" title="0">{
+        return r.DB.Create(&amp;data).Error
+}</span>
+
+func (r *AirQualityRepositoryimpl) UpdateData(id int, data *model.AirQualityData) error <span class="cov0" title="0">{
+        if err := r.DB.Where("id = ?", id).Updates(&amp;data).Error; err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return r.DB.Preload("Alerts").Preload("Rekomendasi").First(data, id).Error</span>
+}
+
+func (r *AirQualityRepositoryimpl) DeleteData(id int) error <span class="cov0" title="0">{
+        var data model.AirQualityData
+        return r.DB.Delete(&amp;data, id).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package repository
+
+import (
+        "project_mini_golang/domain/model"
+
+        "gorm.io/gorm"
+)
+
+type AlertRepository interface {
+        GetAlerts() ([]model.Alert, error)
+        CreateAlert(alert *model.Alert) error
+        FindAlertByAirQualityID(airQualityID int) (*model.Alert, error)
+        UpdateAlert(alert *model.Alert) error
+}
+
+type AlertRepositoryimpl struct {
+        DB *gorm.DB
+}
+
+func NewAlertRepository(db *gorm.DB) AlertRepository <span class="cov0" title="0">{
+        return &amp;AlertRepositoryimpl{DB: db}
+}</span>
+
+func (r *AlertRepositoryimpl) GetAlerts() ([]model.Alert, error) <span class="cov0" title="0">{
+        var alerts []model.Alert
+        return alerts, r.DB.Find(&amp;alerts).Error
+}</span>
+
+func (r *AlertRepositoryimpl) CreateAlert(alert *model.Alert) error <span class="cov0" title="0">{
+        return r.DB.Create(alert).Error
+}</span>
+
+// FindAlertByAirQualityID mencari alert berdasarkan AirQualityID
+func (r *AlertRepositoryimpl) FindAlertByAirQualityID(airQualityID int) (*model.Alert, error) <span class="cov0" title="0">{
+        var alert model.Alert
+        err := r.DB.Where("air_quality_id = ?", airQualityID).First(&amp;alert).Error
+        if err == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                return nil, nil // Tidak ada data
+        }</span>
+        <span class="cov0" title="0">return &amp;alert, err</span>
+}
+
+// UpdateAlert memperbarui alert yang ada
+func (r *AlertRepositoryimpl) UpdateAlert(alert *model.Alert) error <span class="cov0" title="0">{
+        return r.DB.Save(alert).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package repository
+
+import (
+        "project_mini_golang/domain/model"
+
+        "gorm.io/gorm"
+)
+
+type RekomendasiRepository interface {
+        GetRekomendasi() ([]model.Rekomendasi, error)
+        CreateRekomendasi(rekomendasi *model.Rekomendasi) error
+        FindRekomendasiByAirQualityID(airQualityID int) (*model.Rekomendasi, error)
+        UpdateRekomendasi(rekomendasi *model.Rekomendasi) error
+}
+
+type RekomendasiRepositoryimpl struct {
+        DB *gorm.DB
+}
+
+func NewRekomendasiRepository(db *gorm.DB) RekomendasiRepository <span class="cov0" title="0">{
+        return &amp;RekomendasiRepositoryimpl{DB: db}
+}</span>
+
+func (r *RekomendasiRepositoryimpl) GetRekomendasi() ([]model.Rekomendasi, error) <span class="cov0" title="0">{
+        var rekomendasi []model.Rekomendasi
+        return rekomendasi, r.DB.Find(&amp;rekomendasi).Error
+}</span>
+
+func (r *RekomendasiRepositoryimpl) CreateRekomendasi(rekomendasi *model.Rekomendasi) error <span class="cov0" title="0">{
+        return r.DB.Create(rekomendasi).Error
+}</span>
+
+func (r *RekomendasiRepositoryimpl) FindRekomendasiByAirQualityID(airQualityID int) (*model.Rekomendasi, error) <span class="cov0" title="0">{
+        var rekomendasi model.Rekomendasi
+        err := r.DB.Where("air_quality_id = ?", airQualityID).First(&amp;rekomendasi).Error
+        if err == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+        <span class="cov0" title="0">return &amp;rekomendasi, err</span>
+}
+
+func (r *RekomendasiRepositoryimpl) UpdateRekomendasi(rekomendasi *model.Rekomendasi) error <span class="cov0" title="0">{
+        return r.DB.Save(rekomendasi).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package repository
+
+import (
+        "project_mini_golang/domain/model"
+
+        "gorm.io/gorm"
+)
+
+type UserRepository interface {
+        GetByUsername(email string) (*model.User, error)
+        CreateUser(*model.User) error
+}
+
+type userRepositorystate struct {
+        DB *gorm.DB
+}
+
+func NewAuthRepository(db *gorm.DB) UserRepository <span class="cov0" title="0">{
+        return &amp;userRepositorystate{DB: db}
+}</span>
+
+func (r *userRepositorystate) CreateUser(user *model.User) error <span class="cov0" title="0">{
+        return r.DB.Create(user).Error
+}</span>
+
+func (r *userRepositorystate) GetByUsername(email string) (*model.User, error) <span class="cov0" title="0">{
+        var user model.User
+        err := r.DB.Where("email = ?", email).First(&amp;user).Error
+        return &amp;user, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package usecase
+
+import (
+        "errors"
+        "project_mini_golang/domain/model"
+        "project_mini_golang/domain/repository"
+)
+
+type AirQualityUsecase interface {
+        GetData() ([]model.AirQualityData, error)
+        GetDataID(id int) (model.AirQualityData, error)
+        PostData(*model.AirQualityData) error
+        PutData(id int, data *model.AirQualityData) error
+        DeleteDatas(id int) error
+}
+
+type AirQualityUsecaseimpl struct {
+        Repo repository.AirQualityRepository
+}
+
+func NewAirQualityUsecase(repo repository.AirQualityRepository) AirQualityUsecase <span class="cov0" title="0">{
+        return &amp;AirQualityUsecaseimpl{Repo: repo}
+}</span>
+
+func (u *AirQualityUsecaseimpl) GetData() ([]model.AirQualityData, error) <span class="cov0" title="0">{
+        return u.Repo.GetAllData()
+}</span>
+
+func (u *AirQualityUsecaseimpl) GetDataID(id int) (model.AirQualityData, error) <span class="cov0" title="0">{
+        return u.Repo.GetDataByID(id)
+}</span>
+
+func (u *AirQualityUsecaseimpl) PostData(data *model.AirQualityData) error <span class="cov0" title="0">{
+        return u.Repo.CreateData(data)
+}</span>
+func (u *AirQualityUsecaseimpl) PutData(id int, data *model.AirQualityData) error <span class="cov0" title="0">{
+        var dataasli model.AirQualityData
+        if dataasli.UserID != data.UserID </span><span class="cov0" title="0">{
+                return errors.New("user_id tidak boleh diubah")
+        }</span>
+        <span class="cov0" title="0">return u.Repo.UpdateData(id, data)</span>
+}
+func (u *AirQualityUsecaseimpl) DeleteDatas(id int) error <span class="cov0" title="0">{
+        return u.Repo.DeleteData(id)
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package usecase
+
+import (
+        "context"
+        "fmt"
+        "project_mini_golang/domain/model"
+        "project_mini_golang/domain/repository"
+        "project_mini_golang/helper"
+        "time"
+)
+
+type AlertUsecase interface {
+        GenerateAlert(ctx context.Context, data *model.AirQualityData) error
+        GetAllAlerts() ([]model.Alert, error)
+}
+
+type AlertUsecaseImpl struct {
+        Repo repository.AlertRepository
+}
+
+func NewAlertUsecase(repo repository.AlertRepository) AlertUsecase <span class="cov0" title="0">{
+        return &amp;AlertUsecaseImpl{Repo: repo}
+}</span>
+
+func (u *AlertUsecaseImpl) GenerateAlert(ctx context.Context, data *model.AirQualityData) error <span class="cov0" title="0">{
+        pertanyaan := fmt.Sprintf(`Data kualitas udara:
+        - Lokasi: %s
+        - PM2.5: %.2f
+        - CO: %.2f
+        - O3: %.2f
+        - Risk Index: %.2f
+        
+        Berikan saran yang sesuai berdasarkan data tersebut dan pastikan untuk menyebutkan alert level dan pesan peringatan.`,
+                data.Location, data.PM25, data.CO, data.O3, data.RiskIndex)
+
+        jawaban, err := helper.ResponseAI(ctx, pertanyaan)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">existingAlert, err := u.Repo.FindAlertByAirQualityID(data.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if existingAlert != nil </span><span class="cov0" title="0">{
+                existingAlert.AlertMessage = jawaban
+                existingAlert.ExpiresAt = time.Now().Add(24 * time.Hour)
+                return u.Repo.UpdateAlert(existingAlert)
+        }</span>
+
+        <span class="cov0" title="0">newAlert := &amp;model.Alert{
+                AirQualityID: data.ID,
+                AlertMessage: jawaban,
+                CreatedAt:    time.Now(),
+                ExpiresAt:    time.Now().Add(24 * time.Hour),
+        }
+
+        return u.Repo.CreateAlert(newAlert)</span>
+}
+
+func (u *AlertUsecaseImpl) GetAllAlerts() ([]model.Alert, error) <span class="cov0" title="0">{
+        return u.Repo.GetAlerts()
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package usecase
+
+import (
+        "context"
+        "fmt"
+        "project_mini_golang/domain/model"
+        "project_mini_golang/domain/repository"
+        "project_mini_golang/helper"
+        "time"
+)
+
+type RekomendasiUsecase interface {
+        GenerateRekomendasi(ctx context.Context, data *model.AirQualityData) error
+        GetAllRekomendasi() ([]model.Rekomendasi, error)
+}
+
+type RekomendasiUsecaseImpl struct {
+        Repo repository.RekomendasiRepository
+}
+
+func NewRekomendasiUsecase(repo repository.RekomendasiRepository) RekomendasiUsecase <span class="cov0" title="0">{
+        return &amp;RekomendasiUsecaseImpl{Repo: repo}
+}</span>
+
+func (u *RekomendasiUsecaseImpl) GenerateRekomendasi(ctx context.Context, data *model.AirQualityData) error <span class="cov0" title="0">{
+
+        pertanyaan := fmt.Sprintf("Berikan rekomendasi kesehatan dari data udara berikut: %+v", data)
+
+        jawaban, err := helper.ResponseAI(ctx, pertanyaan)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // Cek apakah sudah ada alert untuk AirQualityID ini
+        <span class="cov0" title="0">existingRekomendasi, err := u.Repo.FindRekomendasiByAirQualityID(data.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if existingRekomendasi != nil </span><span class="cov0" title="0">{
+                // Update alert jika sudah ada
+                existingRekomendasi.Message = jawaban
+                existingRekomendasi.CreatedAt = time.Now().Add(24 * time.Hour)
+                return u.Repo.UpdateRekomendasi(existingRekomendasi)
+        }</span>
+
+        // Jika belum ada alert, buat alert baru
+        <span class="cov0" title="0">newRekomendasi := &amp;model.Rekomendasi{
+                AirQualityID: data.ID,
+                Message:      jawaban,
+                CreatedAt:    time.Now(),
+        }
+
+        return u.Repo.CreateRekomendasi(newRekomendasi)</span>
+}
+
+func (u *RekomendasiUsecaseImpl) GetAllRekomendasi() ([]model.Rekomendasi, error) <span class="cov0" title="0">{
+        return u.Repo.GetRekomendasi()
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package usecase
+
+import (
+        "errors"
+        "project_mini_golang/domain/model"
+        "project_mini_golang/domain/repository"
+        "project_mini_golang/service"
+
+        "golang.org/x/crypto/bcrypt"
+)
+
+type UserUsecase interface {
+        Register(*model.User) error
+        Login(email string, password string) (string, error)
+}
+
+type AuthUsecase struct {
+        UserRepo   repository.UserRepository
+        JWTService service.JWTService
+}
+
+func NewAuthUsecase(repo repository.UserRepository, jwtService service.JWTService) UserUsecase <span class="cov8" title="1">{
+        return &amp;AuthUsecase{UserRepo: repo, JWTService: jwtService}
+}</span>
+
+func (u *AuthUsecase) Register(user *model.User) error <span class="cov8" title="1">{
+        if user.Email == "" </span><span class="cov8" title="1">{
+                return errors.New("email is required")
+        }</span>
+        <span class="cov8" title="1">if user.Password == "" </span><span class="cov8" title="1">{
+                return errors.New("password is required")
+        }</span>
+
+        <span class="cov8" title="1">hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">user.Password = string(hashPassword)
+
+        return u.UserRepo.CreateUser(user)</span>
+}
+
+func (u *AuthUsecase) Login(email, password string) (string, error) <span class="cov8" title="1">{
+        if email == "" </span><span class="cov8" title="1">{
+                return "", errors.New("email is required")
+        }</span>
+
+        <span class="cov8" title="1">user, err := u.UserRepo.GetByUsername(email)
+        if err != nil || user == nil </span><span class="cov0" title="0">{
+                return "", errors.New("invalid credentials")
+        }</span>
+
+        <span class="cov8" title="1">err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+        if err != nil </span><span class="cov8" title="1">{
+                return "", errors.New("invalid credentials")
+        }</span>
+
+        <span class="cov8" title="1">token, err := u.JWTService.GenerateJWT(user.Email, user.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov8" title="1">return token, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package helper
+
+import (
+        "github.com/labstack/echo/v4"
+)
+
+func JSONErrorResponse(ctx echo.Context, status int, message string) error <span class="cov0" title="0">{
+        return ctx.JSON(status, map[string]interface{}{
+                "success": false,
+                "message": message,
+        })
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package helper
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/labstack/echo/v4"
+)
+
+func JSONSuccessResponse(ctx echo.Context, data interface{}) error <span class="cov0" title="0">{
+        return ctx.JSON(http.StatusOK, map[string]interface{}{
+                "success": true,
+                "data":    data,
+        })
+}</span>
+func GetIDParam(ctx echo.Context) (int, error) <span class="cov0" title="0">{
+        id, err := strconv.Atoi(ctx.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                return 0, err
+        }</span>
+        <span class="cov0" title="0">return id, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package helper
+
+import (
+        "context"
+        "fmt"
+        "log"
+        "os"
+        "strings"
+
+        "github.com/google/generative-ai-go/genai"
+        "google.golang.org/api/option"
+)
+
+func ResponseAI(ctx context.Context, question string) (string, error) <span class="cov0" title="0">{
+        client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("AI_API_KEY")))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">modelAI := client.GenerativeModel("gemini-pro")
+        modelAI.SetTemperature(0)
+
+        resp, err := modelAI.GenerateContent(ctx, genai.Text(question))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">answer := resp.Candidates[0].Content.Parts[0]
+        answerString := fmt.Sprintf("%v", answer)
+
+        // Bersihkan simbol tambahan dari teks
+        answerString = strings.ReplaceAll(answerString, "*", "")
+        answerString = strings.ReplaceAll(answerString, "", "")
+        answerString = strings.ReplaceAll(answerString, "\n\n", " -")
+        return answerString, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package main
+
+import (
+        "log"
+        "project_mini_golang/config"
+        "project_mini_golang/controllers"
+        "project_mini_golang/domain/repository"
+        "project_mini_golang/domain/usecase"
+        "project_mini_golang/middleware"
+        "project_mini_golang/routes"
+        "project_mini_golang/service"
+
+        "github.com/joho/godotenv"
+        "github.com/labstack/echo/v4"
+)
+
+func main() <span class="cov0" title="0">{
+        loadEnv()
+
+        // Inisialisasi database
+        DB, err := config.InitDB()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Gagal menginisialisasi database: %v", err)
+        }</span>
+
+        // database
+        <span class="cov0" title="0">userRepo := repository.NewAuthRepository(DB)
+        airQualityRepo := repository.NewAirQualityRepository(DB)
+        alertRepo := repository.NewAlertRepository(DB)
+        rekomendasiRepo := repository.NewRekomendasiRepository(DB)
+
+        // service jwt
+        secretKey := config.NewJWTConfig()
+        jwtService := service.NewJWTService(secretKey)
+
+        // usecase
+        userUsecase := usecase.NewAuthUsecase(userRepo, jwtService)
+        airQualityUsecase := usecase.NewAirQualityUsecase(airQualityRepo)
+        alertUsecase := usecase.NewAlertUsecase(alertRepo)
+        rekomendasiUsecase := usecase.NewRekomendasiUsecase(rekomendasiRepo)
+
+        // controller
+        authController := controllers.NewAuthController(userUsecase)
+        airQualityController := controllers.NewAirQualityController(airQualityUsecase, alertUsecase, rekomendasiUsecase)
+        alertController := controllers.NewAlertController(alertUsecase)
+        rekomendasiController := controllers.NewRekomendasiController(rekomendasiUsecase)
+
+        // middleware jwt
+        jwtMiddleware := middleware.NewJWTMiddleware(secretKey)
+
+        // routing autentikasi
+        e := echo.New()
+        authGroup := e.Group("")
+        routes.AuthRoutes(authGroup, authController)
+
+        // routing kualitas udara dengan middleware jwt
+        route_group := e.Group("/airquality", jwtMiddleware.Handler)
+        routes.AirqualityRoutes(route_group, airQualityController)
+        routes.AlertRoutes(route_group, alertController)
+        routes.RekomendasiRoutes(route_group, rekomendasiController)
+
+        e.Start(":8000")</span>
+}
+
+func loadEnv() <span class="cov0" title="0">{
+        if err := godotenv.Load(); err != nil </span><span class="cov0" title="0">{
+                log.Fatal("Gagal memuat file .env")
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package middleware
+
+import (
+        "project_mini_golang/config"
+        "project_mini_golang/helper"
+        "project_mini_golang/service"
+
+        "github.com/golang-jwt/jwt/v5"
+        "github.com/labstack/echo/v4"
+)
+
+type JWTMiddleware struct {
+        config *config.JWTConfig
+}
+
+func NewJWTMiddleware(cfg *config.JWTConfig) *JWTMiddleware <span class="cov0" title="0">{
+        return &amp;JWTMiddleware{config: cfg}
+}</span>
+
+func (m *JWTMiddleware) Handler(next echo.HandlerFunc) echo.HandlerFunc <span class="cov0" title="0">{
+        return func(c echo.Context) error </span><span class="cov0" title="0">{
+                h, err := c.Cookie("token")
+                if err != nil </span><span class="cov0" title="0">{
+                        return helper.JSONErrorResponse(c, 401, "gagal login token tidak ditemukan")
+
+                }</span>
+
+                <span class="cov0" title="0">tokenString := h.Value
+                claims := &amp;service.JwtCustomClaims{}
+
+                token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) </span><span class="cov0" title="0">{
+                        return []byte(m.config.SecretKey), nil
+                }</span>)
+
+                <span class="cov0" title="0">if err != nil || !token.Valid </span><span class="cov0" title="0">{
+                        return helper.JSONErrorResponse(c, 401, "invalid token")
+                }</span>
+
+                <span class="cov0" title="0">c.Set("user_id", claims.UserID)
+
+                // Melanjutkan ke handler berikutnya jika token valid
+                return next(c)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package routes
+
+import (
+        "project_mini_golang/controllers"
+
+        "github.com/labstack/echo/v4"
+)
+
+func AirqualityRoutes(e *echo.Group, airqualityroutes *controllers.AirQualityController) <span class="cov0" title="0">{
+        e.GET("", airqualityroutes.GetData)
+        e.GET("/:id", airqualityroutes.GetDataByID)
+        e.POST("", airqualityroutes.PostData)
+        e.PUT("/:id", airqualityroutes.UpdateData)
+        e.DELETE("/:id", airqualityroutes.DeleteData)
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package routes
+
+import (
+        "project_mini_golang/controllers"
+
+        "github.com/labstack/echo/v4"
+)
+
+func AlertRoutes(e *echo.Group, airqualityroutes *controllers.AlertController) <span class="cov0" title="0">{
+        e.GET("/alert", airqualityroutes.GetAllDataAlerts)
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package routes
+
+import (
+        "project_mini_golang/controllers"
+
+        "github.com/labstack/echo/v4"
+)
+
+func AuthRoutes(e *echo.Group, authController *controllers.AuthController) <span class="cov0" title="0">{
+        e.POST("/register", authController.Register)
+        e.POST("/login", authController.Login)
+        e.GET("/logout", authController.Logout)
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package routes
+
+import (
+        "project_mini_golang/controllers"
+
+        "github.com/labstack/echo/v4"
+)
+
+func RekomendasiRoutes(e *echo.Group, airqualityroutes *controllers.RekomendasiController) <span class="cov0" title="0">{
+        e.GET("/rekomendasi", airqualityroutes.GetAllDataAlerts)
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package service
+
+import (
+        "errors"
+        "project_mini_golang/config"
+        "time"
+
+        "github.com/golang-jwt/jwt/v5"
+)
+
+type JwtCustomClaims struct {
+        UserID int    `json:"user_id"`
+        Email  string `json:"email"`
+        jwt.RegisteredClaims
+}
+
+type JWTService interface {
+        GenerateJWT(email string, userID int) (string, error)
+}
+
+type jwtService struct {
+        config *config.JWTConfig
+}
+
+func NewJWTService(cfg *config.JWTConfig) JWTService <span class="cov8" title="1">{
+        return &amp;jwtService{config: cfg}
+}</span>
+func (s *jwtService) GenerateJWT(email string, id int) (string, error) <span class="cov8" title="1">{
+        // Periksa apakah SecretKey kosong
+        if s.config.SecretKey == "" </span><span class="cov8" title="1">{
+                return "", errors.New("secret key is required")
+        }</span>
+
+        <span class="cov8" title="1">claims := &amp;JwtCustomClaims{
+                UserID: id,
+                Email:  email,
+                RegisteredClaims: jwt.RegisteredClaims{
+                        ExpiresAt: jwt.NewNumericDate(time.Now().Add(72 * time.Hour)),
+                },
+        }
+        // Membuat token dengan claims
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+        t, err := token.SignedString([]byte(s.config.SecretKey))
+
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov8" title="1">return t, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

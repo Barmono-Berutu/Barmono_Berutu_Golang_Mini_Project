@@ -28,7 +28,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Create .env file
-        run: echo "${{ secrets.ENV }}" >> .env
+        run: |
+          echo "${{ secrets.ENV }}" > .env
+          cat .env  # Debugging
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USER }}/project_mini_golang:terbaru .
@@ -43,7 +45,7 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USER }}/project_mini_golang:terbaru
 
   deploy:
-    # needs: build-and-push-docker
+    needs: build-and-push-docker
     runs-on: ubuntu-latest
     env:
         IMAGE_URI: '${{ secrets.DOCKER_USER }}/project_mini_golang:terbaru'
@@ -52,25 +54,43 @@ jobs:
     steps:
     - name: Check out the code
       uses: actions/checkout@v2
+
     - name: Create PEM file from secret
       run: |
         echo "${{ secrets.EC2_PEM }}" > ec2-key.pem
         chmod 600 ec2-key.pem  # Set appropriate permissions
 
+    - name: Copy .env to EC2
+      run: |
+        scp -i ec2-key.pem -o StrictHostKeyChecking=no .env $EC2_USER@$EC2_HOST:/home/$EC2_USER/.env
+
     - name: Deploy to EC2
       run: |
-
         ssh -i ec2-key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
 
-          # Stop the current container if running
-          sudo docker ps -q --filter "name=my-project-mini-golang" | grep -q . && docker stop my-project-mini-golang|| true
-          sudo docker rm my-project-mini-golang || true
+          # Stop and remove old container
+          if sudo docker ps -a --filter "name=my-project-mini-golang" | grep my-project-mini-golang; then
+            echo "Stopping and removing old container..."
+            sudo docker stop my-project-mini-golang
+            sudo docker rm my-project-mini-golang
+          else
+            echo "No old container found."
+          fi
 
-          # Pull the latest image from ECR
+          # Remove old image (optional)
+          if sudo docker images | grep $IMAGE_URI; then
+            echo "Removing old image..."
+            sudo docker rmi -f $IMAGE_URI
+          fi
+
+          # Pull the latest image
+          echo "Pulling latest image..."
           sudo docker pull $IMAGE_URI
 
           # Run the new container
-          sudo docker run -d --name my-project-mini-golang -p 8000:8000 $IMAGE_URI
+          echo "Running new container..."
+          sudo docker run -d --name my-project-mini-golang --env-file /home/$EC2_USER/.env -p 8000:8000 $IMAGE_URI
         EOF
+
     - name: Clean up PEM file
       run: rm -f ec2-key.pem

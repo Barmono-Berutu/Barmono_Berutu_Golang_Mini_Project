@@ -18,7 +18,7 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 		log.Fatal("API Key is missing")
 		return "", fmt.Errorf("API Key is missing")
 	}
-
+	//
 	httpClient := &http.Client{}
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey), option.WithHTTPClient(httpClient))

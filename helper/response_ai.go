@@ -2,7 +2,6 @@ package helper
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,19 +14,16 @@ import (
 
 func ResponseAI(ctx context.Context, question string) (string, error) {
 	// Get the API key from environment variable
-	apiKey := os.Getenv("AIzaSyDAsFVvWobfb1sWT-fZE1FJVyLyq-9kh0k")
+	apiKey := os.Getenv("AI_API_KEY")
 	if apiKey == "" {
 		log.Fatal("API Key is missing")
 		return "", fmt.Errorf("API Key is missing")
 	}
 
-	// Create a custom HTTP client with insecure transport (for testing purposes)
-	httpClient := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // Note: Not recommended for production
-		},
-	}
+	// Create default HTTP client
+	httpClient := &http.Client{}
 
+	// Create a new GenAI client
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey), option.WithHTTPClient(httpClient))
 	if err != nil {
 		log.Printf("Error creating client: %v", err)
@@ -35,13 +31,16 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 	}
 	defer client.Close()
 
+	// Call the model
 	model := client.GenerativeModel("gemini-1.5-flash")
+	log.Println("Sending request to generative AI model...")
 	resp, err := model.GenerateContent(ctx, genai.Text(question))
 	if err != nil {
 		log.Printf("Error generating content: %v", err)
 		return "", err
 	}
 
+	// Process the response
 	if len(resp.Candidates) == 0 || len(resp.Candidates[0].Content.Parts) == 0 {
 		log.Println("No response from AI model")
 		return "", fmt.Errorf("no response from AI model")

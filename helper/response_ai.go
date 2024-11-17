@@ -30,7 +30,6 @@ func ResponseAI(ctx context.Context, question string) (string, error) {
 
 	var result strings.Builder
 
-	// Iterate through candidates to construct the response
 	for _, cand := range resp.Candidates {
 		if cand.Content != nil {
 			for _, part := range cand.Content.Parts {

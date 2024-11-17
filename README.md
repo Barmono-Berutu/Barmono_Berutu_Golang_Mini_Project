@@ -14,6 +14,7 @@ Fitur utama meliputi registrasi pengguna, login/logout, pengelolaan data kualita
 5. [Cara Instalasi](#cara-instalasi)
 6. [Cara Penggunaan](#cara-penggunaan)
 7. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
+8. [Contoh Hasil Postman](#contoh-postman)
 
 ---
 
@@ -21,7 +22,7 @@ Fitur utama meliputi registrasi pengguna, login/logout, pengelolaan data kualita
 Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang mengelola data pengguna, kualitas udara, dan hasil analisis berbasis AI.
 
 ### ERD Diagram
-![ERD](./assets/image/ERD.png)
+![ERD](image.png)
 
 ### Penjelasan ERD
 
@@ -65,6 +66,9 @@ Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang menge
 ### **Deskripsi Umum**
 High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alur kerja dan komponen utama dalam sistem backend API AirQuality.
 
+### **Diagram Visual**
+![HLA](hla.png)
+
 ### **Komponen Utama**
 
 1. **User**
@@ -87,9 +91,6 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
 
 5. **AI Module**
    - Menganalisis data kualitas udara untuk memberikan alert dan rekomendasi berbasis logika AI.
-
-### **Diagram Visual**
-![HLA](./assets/image/HLA.png)
 
 ---
 
@@ -148,4 +149,23 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
 - **Database**: MySQL
 - **Autentikasi**: JSON Web Token (JWT)
 - **AI**: Google Generative AI
+
+
+## Contoh Hasil Postman
+1. **User Autentikasi**
+![register](image-2.png)
+![login](image-3.png)
+2. **Crud AirQuality**
+![login](image-4.png)
+![login](image-5.png)
+![login](image-6.png)
+![login](image-7.png)
+![login](image-8.png)
+3. **Alert**
+![login](image-9.png)
+4. **Recomendasi**
+![login](image-10.png)
+5. **Logout**
+![login](image-11.png)
+
 

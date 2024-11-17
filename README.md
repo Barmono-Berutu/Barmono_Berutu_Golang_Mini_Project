@@ -68,7 +68,7 @@ Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang menge
 High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alur kerja dan komponen utama dalam sistem backend API AirQuality.
 
 ### **Diagram Visual**
-![HLA](hla.png)
+![HLA](hla_project.png)
 
 ### **Komponen Utama**
 

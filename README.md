@@ -1,7 +1,8 @@
 
 # Project Mini Golang AirQuality
 
-API ini adalah proyek mini yang dibangun dengan Golang untuk memantau dan mengelola data kualitas udara. Fitur utama meliputi registrasi pengguna, login/logout, pengelolaan data kualitas udara, serta rekomendasi dan alert berbasis AI.
+API ini adalah proyek mini yang dibangun dengan Golang untuk memantau dan mengelola data kualitas udara. 
+Fitur utama meliputi registrasi pengguna, login/logout, pengelolaan data kualitas udara, serta rekomendasi dan alert berbasis AI.
 
 ---
 
@@ -20,9 +21,10 @@ API ini adalah proyek mini yang dibangun dengan Golang untuk memantau dan mengel
 Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang mengelola data pengguna, kualitas udara, dan hasil analisis berbasis AI.
 
 ### ERD Diagram
-![ERD](image.png)
+![ERD](./assets/image/ERD.png)
 
 ### Penjelasan ERD
+
 #### **Tabel dan Relasi**
 1. **Users**
    - **Tabel ini menyimpan informasi pengguna aplikasi.**
@@ -64,6 +66,7 @@ Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang menge
 High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alur kerja dan komponen utama dalam sistem backend API AirQuality.
 
 ### **Komponen Utama**
+
 1. **User**
    - Representasi pengguna aplikasi (melalui web atau Postman).
    - Mengirimkan permintaan ke API untuk mengakses fitur seperti autentikasi, pengelolaan data kualitas udara, dan rekomendasi.
@@ -72,8 +75,8 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
    - Berfungsi sebagai pintu masuk utama untuk semua permintaan API.
    - Mengatur routing, autentikasi, dan load balancing.
 
-3. **Backend**
-   - Berperan sebagai inti sistem untuk mengelola logika bisnis dan komunikasi dengan komponen lain.
+3. **Backend (Echo Framework)**
+   - Berfungsi sebagai inti sistem untuk mengelola logika bisnis dan komunikasi dengan komponen lain.
    - **Modul Utama:**
      - **Autentikasi:** Mengelola login dan registrasi pengguna menggunakan JWT.
      - **Manajemen Kualitas Udara:** CRUD data kualitas udara.
@@ -85,8 +88,8 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
 5. **AI Module**
    - Menganalisis data kualitas udara untuk memberikan alert dan rekomendasi berbasis logika AI.
 
-### **Diagram Visual**  
-![HLA](D:\DATA_PEMROGRAMAN_MONO_2024\project_mini_golang\erd.png)
+### **Diagram Visual**
+![HLA](./assets/image/HLA.png)
 
 ---
 
@@ -139,16 +142,10 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
    go run main.go
    ```
 
----
+## Teknologi yang Digunakan
+- **Bahasa Pemrograman**: Golang
+- **Framework**: Echo Framework
+- **Database**: MySQL
+- **Autentikasi**: JSON Web Token (JWT)
+- **AI**: Google Generative AI
 
-## Cara Penggunaan
-
-1. Gunakan file koleksi Postman `AIR_Quality_API.postman_collection.json` untuk mencoba semua endpoint.
-2. Pastikan untuk menambahkan token JWT pada header untuk endpoint yang membutuhkan autentikasi:
-   ```
-   Authorization: Bearer <token>
-   ```
-
---- 
-
-Silakan sesuaikan gambar di direktori `assets/image` sesuai dengan ERD dan HLA.

@@ -73,9 +73,15 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -i ec2-key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
-            # Stop the current container if running
-            sudo docker ps -q --filter "name=mini_golang_airquality" | grep -q . && sudo docker stop mini_golang_airquality || true
-            sudo docker rm mini_golang_airquality || true
+            # Stop and remove the current container if running
+            CONTAINER_ID=\$(sudo docker ps -q --filter "name=mini_golang_airquality")
+            if [ -n "\$CONTAINER_ID" ]; then
+              sudo docker stop \$CONTAINER_ID
+              sudo docker rm \$CONTAINER_ID
+            fi
+
+            # Remove dangling images to free up space
+            sudo docker images -f "dangling=true" -q | xargs -r sudo docker rmi
 
             # Pull the latest image from Docker Hub
             sudo docker pull $IMAGE_URI

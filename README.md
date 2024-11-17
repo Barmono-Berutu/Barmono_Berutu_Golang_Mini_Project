@@ -1,31 +1,32 @@
 
-# Project Mini Golang AirQuality
+# **Project Mini Golang AirQuality**
 
-API ini adalah proyek mini yang dibangun dengan Golang untuk memantau dan mengelola data kualitas udara. 
-Fitur utama meliputi registrasi pengguna, login/logout, pengelolaan data kualitas udara, serta rekomendasi dan alert berbasis AI.
+API ini adalah proyek mini yang dibangun dengan Golang untuk memantau dan mengelola data kualitas udara. Fitur utama meliputi:
+- Registrasi pengguna.
+- Login/Logout.
+- Pengelolaan data kualitas udara.
+- Analisis berbasis AI untuk alert dan rekomendasi tindakan.
 
 ---
 
-## Daftar Isi
+## **Daftar Isi**
 1. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
 2. [High-Level Architecture Diagram (HLA)](#high-level-architecture-diagram-hla)
 3. [Dokumentasi API](#dokumentasi-api)
-4. [Contoh Hasil API](#contoh-hasil-api)
-5. [Cara Instalasi](#cara-instalasi)
-6. [Cara Penggunaan](#cara-penggunaan)
-7. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
-8. [Contoh Hasil Postman](#contoh-postman)
+4. [Cara Instalasi](#cara-instalasi)
+5. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
+6. [Contoh Hasil Postman](#contoh-hasil-postman)
 
 ---
 
-## Entity Relationship Diagram (ERD)
+## **Entity Relationship Diagram (ERD)**
+
 Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang mengelola data pengguna, kualitas udara, dan hasil analisis berbasis AI.
 
-### ERD Diagram
+### **ERD Diagram**
 ![ERD](image.png)
 
-### Penjelasan ERD
-
+### **Penjelasan ERD**
 #### **Tabel dan Relasi**
 1. **Users**
    - **Tabel ini menyimpan informasi pengguna aplikasi.**
@@ -44,7 +45,7 @@ Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang menge
      - `pollutants` (varchar): Detail polutan yang terdeteksi.
      - `recorded_at` (datetime): Waktu pencatatan data kualitas udara.
    - **Relasi:**
-     - Satu pengguna memiliki banyak data kualitas udara (one-to-many dengan tabel Users).
+     - Satu pengguna memiliki banyak data kualitas udara.
 
 3. **AI_Response**
    - **Tabel ini menyimpan hasil analisis dan rekomendasi dari AI.**
@@ -53,7 +54,7 @@ Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang menge
      - `alert_level` (varchar): Tingkat kewaspadaan berdasarkan data AI.
      - `recommendations` (text): Rekomendasi tindakan dari AI.
    - **Relasi:**
-     - Satu data kualitas udara memiliki satu hasil analisis AI (one-to-one dengan tabel AirQuality).
+     - Satu data kualitas udara memiliki satu hasil analisis AI.
 
 #### **Relasi Antar Tabel**
 - **Users → AirQuality:** Relasi one-to-many.
@@ -61,7 +62,7 @@ Berikut adalah Entity Relationship Diagram (ERD) untuk API AirQuality yang menge
 
 ---
 
-## High-Level Architecture Diagram (HLA)
+## **High-Level Architecture Diagram (HLA)**
 
 ### **Deskripsi Umum**
 High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alur kerja dan komponen utama dalam sistem backend API AirQuality.
@@ -94,7 +95,7 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
 
 ---
 
-## Dokumentasi API
+## **Dokumentasi API**
 
 ### **Fitur Autentikasi**
 | No | Method | Endpoint    | Request Body                              | Deskripsi                               |
@@ -119,7 +120,7 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
 
 ---
 
-## Cara Instalasi
+## **Cara Instalasi**
 
 1. **Clone Repository**
    ```bash
@@ -143,29 +144,43 @@ High-Level Architecture Diagram (HLA) memberikan gambaran menyeluruh tentang alu
    go run main.go
    ```
 
-## Teknologi yang Digunakan
+---
+
+## **Teknologi yang Digunakan**
 - **Bahasa Pemrograman**: Golang
 - **Framework**: Echo Framework
 - **Database**: MySQL
 - **Autentikasi**: JSON Web Token (JWT)
 - **AI**: Google Generative AI
 
+---
 
-## Contoh Hasil Postman
-1. **User Autentikasi**
-![register](image-2.png)
-![login](image-3.png)
-2. **Crud AirQuality**
-![login](image-4.png)
-![login](image-5.png)
-![login](image-6.png)
-![login](image-7.png)
-![login](image-8.png)
-3. **Alert**
-![login](image-9.png)
-4. **Recomendasi**
-![login](image-10.png)
-5. **Logout**
-![login](image-11.png)
+## **Contoh Hasil Postman**
 
+### **1. User Autentikasi**
+- **Registrasi**  
+  ![register](image-2.png)
+- **Login**  
+  ![login](image-3.png)
 
+### **2. CRUD AirQuality**
+- **Menambahkan Data**  
+  ![add](image-4.png)
+- **Melihat Semua Data**  
+  ![view-all](image-5.png)
+- **Melihat Data Berdasarkan ID**  
+  ![view-id](image-6.png)
+- **Mengedit Data**  
+  ![edit](image-7.png)
+- **Menghapus Data**  
+  ![delete](image-8.png)
+
+### **3. Alert dan Rekomendasi**
+- **Alert dari AI**  
+  ![alert](image-9.png)
+- **Rekomendasi dari AI**  
+  ![recommendation](image-10.png)
+
+---
+
+Dokumen ini memberikan panduan lengkap untuk memahami, menginstal, dan menggunakan API **Project Mini Golang AirQuality**. Terimakasih

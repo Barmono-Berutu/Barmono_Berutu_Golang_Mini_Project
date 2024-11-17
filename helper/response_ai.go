@@ -3,6 +3,7 @@ package helper
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -10,36 +11,28 @@ import (
 	"google.golang.org/api/option"
 )
 
-// ResponseAI generates a response using the generative AI API
 func ResponseAI(ctx context.Context, question string) (string, error) {
-	// Create the client using the API key from environment variables
 	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("AI_API_KEY")))
 	if err != nil {
-		return "", fmt.Errorf("failed to create AI client: %v", err)
+		log.Fatal(err)
+		return "", err
 	}
-	defer client.Close()
 
-	// Select the generative model
-	model := client.GenerativeModel("gemini-1.5-flash")
+	modelAI := client.GenerativeModel("gemini-1.5-flash")
+	modelAI.SetTemperature(0)
 
-	// Generate content using the AI model
-	resp, err := model.GenerateContent(ctx, genai.Text(question))
+	resp, err := modelAI.GenerateContent(ctx, genai.Text(question))
 	if err != nil {
-		return "", fmt.Errorf("failed to generate content: %v", err)
+		log.Fatal(err)
+		return "", err
 	}
 
-	var result strings.Builder
+	answer := resp.Candidates[0].Content.Parts[0]
+	answerString := fmt.Sprintf("%v", answer)
 
-	for _, cand := range resp.Candidates {
-		if cand.Content != nil {
-			for _, part := range cand.Content.Parts {
-				result.WriteString(fmt.Sprintf("%s", part))
-			}
-		}
-	}
-
-	// Clean up the result (remove newlines)
-	finalResult := strings.ReplaceAll(result.String(), "\n", "")
-
-	return finalResult, nil
+	// Bersihkan simbol tambahan dari teks
+	answerString = strings.ReplaceAll(answerString, "*", "")
+	answerString = strings.ReplaceAll(answerString, "", "")
+	answerString = strings.ReplaceAll(answerString, "\n\n", " -")
+	return answerString, nil
 }
